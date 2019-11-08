@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import Header from './header';
+import BaseCurrency from './baseCurrency'
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      amount: "Enter amount",
+      currencies: []
+    }
+  }
 
+  getAmount = (e) => {
+    this.setState({ amount: e.target.value })
+  }
+
+  componentDidMount() {
+    fetch("https://gist.githubusercontent.com/mddenton/062fa4caf150bdf845994fc7a3533f74/raw/27beff3509eff0d2690e593336179d4ccda530c2/Common-Currency.json"
+    ).then(res => res.json())
+      .then(data => this.setState({ currencies: data }));
+  }
+
+  render() {
+    return (
+      <div>
+        <Header />
+        <input onChange={this.getAmount} value={this.state.amount}></input>
+        <BaseCurrency currencySymbol={this.state.currencies} />
+
+        <p></p>
+
+      </div>
+    )
+  }
+}
 export default App;
